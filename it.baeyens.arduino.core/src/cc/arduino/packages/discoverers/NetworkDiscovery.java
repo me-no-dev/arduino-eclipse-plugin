@@ -61,12 +61,19 @@ public class NetworkDiscovery
 
 	public String port;
 
+	public boolean ssh_upload;
+	public boolean tcp_check;
+	public boolean auth_upload;
+
 	public bonour() {
 	    this.address = ""; //$NON-NLS-1$
 	    this.name = ""; //$NON-NLS-1$
 	    this.board = ""; //$NON-NLS-1$
 	    this.distroversion = ""; //$NON-NLS-1$
 	    this.port = ""; //$NON-NLS-1$
+	    this.ssh_upload = true; //$NON-NLS-1$
+	    this.tcp_check = true; //$NON-NLS-1$
+	    this.auth_upload = false; //$NON-NLS-1$
 	}
 
 	public String getLabel() {
@@ -86,6 +93,51 @@ public class NetworkDiscovery
 	this.mappedJmDNSs = new Hashtable<>();
     }
 
+    private bonour getBoardByName(String name){
+      Iterator<bonour> iterator = myComPorts.iterator();
+      while (iterator.hasNext()) {
+        bonour board = iterator.next();
+        if (name.equals(board.name)) {
+          return board;
+        }
+      }
+      return null;
+    }
+    
+    public boolean isNetworkBoard(String name){
+      return (getBoardByName(name) != null);
+    }
+    
+    public String getAddress(String name){
+      bonour board = getBoardByName(name);
+      if(board == null) return null;
+      return board.address;
+    }
+    
+    public String getPort(String name){
+      bonour board = getBoardByName(name);
+      if(board == null) return null;
+      return board.port;
+    }
+    
+    public boolean hasSSH(String name){
+      bonour board = getBoardByName(name);
+      if(board == null) return false;
+      return board.ssh_upload;
+    }
+    
+    public boolean hasAuth(String name){
+      bonour board = getBoardByName(name);
+      if(board == null) return false;
+      return board.auth_upload;
+    }
+    
+    public boolean isTCP(String name){
+      bonour board = getBoardByName(name);
+      if(board == null) return false;
+      return board.tcp_check;
+    }
+    
     public String[] getList() {
 	String[] ret = new String[this.myComPorts.size()];
 	int curPort = 0;
@@ -172,6 +224,13 @@ public class NetworkDiscovery
 	    }
 	    newItem.port = Integer.toString(info.getPort());
 
+	    String useSSH = info.getPropertyString("ssh_upload");
+	    String checkTCP = info.getPropertyString("tcp_check");
+	    String useAuth = info.getPropertyString("auth_upload");
+	    if(useSSH != null && useSSH.contentEquals("no")) newItem.ssh_upload = false;
+	    if(checkTCP != null && checkTCP.contentEquals("no")) newItem.tcp_check = false;
+	    if(useAuth != null && useAuth.contentEquals("yes")) newItem.auth_upload = true;
+	    
 	    synchronized (this) {
 		removeBoardswithSameAdress(newItem);
 		this.myComPorts.add(newItem);
