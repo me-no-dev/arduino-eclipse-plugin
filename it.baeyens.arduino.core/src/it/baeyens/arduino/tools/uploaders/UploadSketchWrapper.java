@@ -90,7 +90,7 @@ public class UploadSketchWrapper {
 		realUploader = new SSHUpload(this.myHighLevelConsoleStream, this.myOutconsoleStream, this.myErrconsoleStream, password, host, login);
 		uploadJobName = Const.UPLOAD_SSH;
 	    } else {
-	        myHighLevelConsoleStream.println("using generic network uploader");
+	        myHighLevelConsoleStream.println(Messages.Upload_network_generic);
 	        
 		String addr = Activator.bonjourDiscovery.getAddress(host);
 		String port = Activator.bonjourDiscovery.getPort(host);
