@@ -21,6 +21,7 @@ import it.baeyens.arduino.common.Common;
 import it.baeyens.arduino.common.Const;
 import it.baeyens.arduino.tools.Helpers;
 import it.baeyens.arduino.tools.PasswordManager;
+import it.baeyens.arduino.ui.Activator;
 
 public class UploadSketchWrapper {
 
@@ -75,18 +76,37 @@ public class UploadSketchWrapper {
 
 	String host = Helpers.getHostFromComPort(MComPort);
 
-	if (host != null) {
-	    this.myHighLevelConsoleStream.println(Messages.Upload_ssh);
-	    PasswordManager pwdManager = new PasswordManager();
-	    if (!pwdManager.setHost(host)) {
-		Common.log(new Status(IStatus.ERROR, Const.CORE_PLUGIN_ID, Messages.Upload_login_credentials_missing + host));
+	if (host != null && Activator.bonjourDiscovery.isNetworkBoard(host)) {
+	    if(Activator.bonjourDiscovery.hasSSH(host)){
+		this.myHighLevelConsoleStream.println(Messages.Upload_ssh);
+		PasswordManager pwdManager = new PasswordManager();
+		if (!pwdManager.setHost(host)) {
+		    Common.log(new Status(IStatus.ERROR, Const.CORE_PLUGIN_ID, Messages.Upload_login_credentials_missing + host));
+		}
+
+		String password = pwdManager.getPassword();
+		String login = pwdManager.getLogin();
+
+		realUploader = new SSHUpload(this.myHighLevelConsoleStream, this.myOutconsoleStream, this.myErrconsoleStream, password, host, login);
+		uploadJobName = Const.UPLOAD_SSH;
+	    } else {
+	        myHighLevelConsoleStream.println(Messages.Upload_network_generic);
+	        
+		String addr = Activator.bonjourDiscovery.getAddress(host);
+		String port = Activator.bonjourDiscovery.getPort(host);
+		boolean auth = Activator.bonjourDiscovery.hasAuth(host);
+	        
+	        String password = "";
+	        if(auth){
+	          PasswordManager pwdManager = new PasswordManager();
+	          if (!pwdManager.setHost(host)) {
+	            Common.log(new Status(IStatus.ERROR, Const.CORE_PLUGIN_ID, Messages.Upload_login_credentials_missing + host));
+	          }
+	          password = pwdManager.getPassword();
+	        }
+	        realUploader = new GenericNetworkUploader(Project, cConf, UpLoadTool, myConsole, addr, port, password);
+	        uploadJobName = UpLoadTool;
 	    }
-
-	    String password = pwdManager.getPassword();
-	    String login = pwdManager.getLogin();
-
-	    realUploader = new SSHUpload(this.myHighLevelConsoleStream, this.myOutconsoleStream, this.myErrconsoleStream, password, host, login);
-	    uploadJobName = Const.UPLOAD_SSH;
 	} else if (UpLoadTool.equalsIgnoreCase(Const.UPLOAD_TOOL_TEENSY)) {
 	    this.myHighLevelConsoleStream.println(Messages.Upload_generic);
 	    realUploader = new GenericLocalUploader(UpLoadTool, Project, cConf, this.myConsole, this.myErrconsoleStream, this.myOutconsoleStream);
