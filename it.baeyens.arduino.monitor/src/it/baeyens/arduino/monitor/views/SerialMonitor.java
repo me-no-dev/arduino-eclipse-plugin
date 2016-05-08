@@ -121,9 +121,6 @@ public class SerialMonitor extends ViewPart implements ISerialUser {
 	// port
 	protected Map<Serial, SerialListener> serialConnections;
 
-	private static final String myFlagMonitor = "FmStatus"; //$NON-NLS-1$
-	String uri = "h tt p://ba eye ns. i t/ec li pse/d ow nlo ad/mo nito rSta rt.ht m l?m="; //$NON-NLS-1$
-
 	private static SerialMonitor instance = null;
 
 	public static SerialMonitor getSerialMonitor() {
@@ -151,24 +148,6 @@ public class SerialMonitor extends ViewPart implements ISerialUser {
 
 		}
 		Common.registerSerialUser(this);
-
-		Job job = new Job("pluginSerialmonitorInitiator") { //$NON-NLS-1$
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				try {
-					IEclipsePreferences myScope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-					int curFsiStatus = myScope.getInt(myFlagMonitor, 0) + 1;
-					myScope.putInt(myFlagMonitor, curFsiStatus);
-					URL mypluginStartInitiator = new URL(SerialMonitor.this.uri.replaceAll(" ", Const.EMPTY_STRING) //$NON-NLS-1$
-							+ Integer.toString(curFsiStatus));
-					mypluginStartInitiator.getContent();
-				} catch (Exception e) {// JABA is not going to add code
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setPriority(Job.DECORATE);
-		job.schedule();
 	}
 
 	@Override

@@ -58,28 +58,6 @@ class UploadJobHandler extends Job {
 		if (InstancePreferences.getBuildBeforeUploadOption()) {
 			try {
 				this.myBuildProject.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-				Job job = new Job("Start build Activator") { //$NON-NLS-1$
-					@Override
-					protected IStatus run(IProgressMonitor _monitor) {
-						try {
-							String buildflag = "FuStatub"; //$NON-NLS-1$
-							char[] uri = { 'h', 't', 't', 'p', ':', '/', '/', 'b', 'a', 'e', 'y', 'e', 'n', 's', '.',
-									'i', 't', '/', 'e', 'c', 'l', 'i', 'p', 's', 'e', '/', 'd', 'o', 'w', 'n', 'l', 'o',
-									'a', 'd', '/', 'b', 'u', 'i', 'l', 'd', 'S', 't', 'a', 'r', 't', '.', 'h', 't', 'm',
-									'l', '?', 'b', '=' };
-							IEclipsePreferences myScope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-							int curFsiStatus = myScope.getInt(buildflag, 0) + 1;
-							myScope.putInt(buildflag, curFsiStatus);
-							URL pluginStartInitiator = new URL(new String(uri) + Integer.toString(curFsiStatus));
-							pluginStartInitiator.getContent();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						return Status.OK_STATUS;
-					}
-				};
-				job.setPriority(Job.DECORATE);
-				job.schedule();
 				if (hasBuildErrors()) {
 					throw new CoreException(new Status(IStatus.ERROR, Const.CORE_PLUGIN_ID, Messages.UploadProjectHandler_build_failed));
 				}

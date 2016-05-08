@@ -103,28 +103,6 @@ public class UploadSketchWrapper {
 	uploadjob.setUser(true);
 	uploadjob.schedule();
 
-	Job job = new Job(Messages.Upload_PluginStartInitiator) {
-	    @Override
-	    protected IStatus run(IProgressMonitor monitor) {
-		try {
-		    String uploadflag = "FuStatus"; //$NON-NLS-1$
-		    char[] uri = { 'h', 't', 't', 'p', ':', '/', '/', 'b', 'a', 'e', 'y', 'e', 'n', 's', '.', 'i', 't', '/', 'e', 'c', 'l', 'i', 'p',
-			    's', 'e', '/', 'd', 'o', 'w', 'n', 'l', 'o', 'a', 'd', '/', 'u', 'p', 'l', 'o', 'a', 'd', 'S', 't', 'a', 'r', 't', '.',
-			    'h', 't', 'm', 'l', '?', 'u', '=' };
-		    IEclipsePreferences myScope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-		    int curFsiStatus = myScope.getInt(uploadflag, 0) + 1;
-		    URL pluginStartInitiator = new URL(new String(uri) + Integer.toString(curFsiStatus));
-		    pluginStartInitiator.getContent();
-		    myScope.putInt(uploadflag, curFsiStatus);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-		return Status.OK_STATUS;
-	    }
-	};
-	job.setPriority(Job.DECORATE);
-	job.schedule();
-
     }
 
     /**

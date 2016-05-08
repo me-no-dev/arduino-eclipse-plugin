@@ -41,29 +41,9 @@ public class ScopeView extends ViewPart implements ServiceListener {
     ScopeListener myScopelistener = null;
     Serial mySerial = null;
 
-    private static final String flagMonitor = "FmStatus"; //$NON-NLS-1$
-    String uri = "h tt p://bae yens.i t/ec li pse/do wnl oad/Sc opeS tart.h t ml?m="; //$NON-NLS-1$
     public Object mstatus; // status of the scope
 
     public ScopeView() {
-
-	Job job = new Job("pluginSerialmonitorInitiator") { //$NON-NLS-1$
-	    @Override
-	    protected IStatus run(IProgressMonitor monitor) {
-		try {
-		    IEclipsePreferences mySCope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-		    int curFsiStatus = mySCope.getInt(flagMonitor, 0) + 1;
-		    mySCope.putInt(flagMonitor, curFsiStatus);
-		    URL pluginStartInitiator = new URL(
-			    ScopeView.this.uri.replaceAll(" ", Const.EMPTY_STRING) + Integer.toString(curFsiStatus)); //$NON-NLS-1$
-		    ScopeView.this.mstatus = pluginStartInitiator.getContent();
-		} catch (Exception e) {// JABA is not going to add code
-		}
-		return Status.OK_STATUS;
-	    }
-	};
-	job.setPriority(Job.DECORATE);
-	job.schedule();
     }
 
     @Override
