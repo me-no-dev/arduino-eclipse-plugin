@@ -76,7 +76,7 @@ public class UploadSketchWrapper {
 
 	String host = Helpers.getHostFromComPort(MComPort);
 
-	if (host != null || Activator.bonjourDiscovery.isNetworkBoard(host)) {
+	if (host != null && Activator.bonjourDiscovery.isNetworkBoard(host)) {
 	    if(Activator.bonjourDiscovery.hasSSH(host)){
 		this.myHighLevelConsoleStream.println(Messages.Upload_ssh);
 		PasswordManager pwdManager = new PasswordManager();
