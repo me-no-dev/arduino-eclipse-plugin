@@ -55,7 +55,7 @@ public class GenericNetworkUploader implements IRealUpload {
     
         String command = "";
         try {
-    	command = envManager.getVariable("A.TOOLS." + this.myUploadTool.toUpperCase() + ".UPLOAD.NETWORK_PATTERN", configurationDescription, true).getValue();
+            command = envManager.getVariable("A.TOOLS." + this.myUploadTool.toUpperCase() + ".UPLOAD.NETWORK_PATTERN", configurationDescription, true).getValue();
         } catch (Exception e) {
             try {
         	command = envManager.getVariable("A.TOOLS." + this.myUploadTool.toUpperCase() + ".UPLOAD.PATTERN", configurationDescription, true).getValue();
