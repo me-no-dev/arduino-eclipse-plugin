@@ -132,6 +132,9 @@ public class Const {
     public static final String ENV_KEY_SERIAL_PORT = ENV_KEY_BOARD_START + "SERIAL.PORT";
     public static final String ENV_KEY_SERIAL_PORT_FILE = ENV_KEY_BOARD_START + "SERIAL.PORT.FILE";
 
+    public static final String ENV_KEY_NETWORK_PORT = ENV_KEY_BOARD_START + "NETWORK.PORT";
+    public static final String ENV_KEY_NETWORK_PASSWORD = ENV_KEY_BOARD_START + "NETWORK.PASSWORD";
+
     public static final String ENV_KEY_JANTJE_START = "JANTJE.";
     public static final String ENV_KEY_JANTJE_WARNING_LEVEL = ENV_KEY_JANTJE_START + "WARNING_LEVEL";
     public static final String ENV_KEY_JANTJE_SIZE_COMMAND = ENV_KEY_BOARD_START + "ALT_SIZE_COMMAND";
@@ -141,6 +144,9 @@ public class Const {
     public static final String ENV_KEY_JANTJE_REFERENCED_PLATFORM_FILE = ENV_KEY_JANTJE_START + "REFERENCED_PLATFORM_FILE";
     public static final String ENV_KEY_JANTJE_COM_PORT = ENV_KEY_JANTJE_START + "COM_PORT";
     public static final String ENV_KEY_JANTJE_BOARD_NAME = ENV_KEY_JANTJE_START + "BOARD_NAME";
+
+    public static final String ENV_KEY_JANTJE_NETWORK_PORT = ENV_KEY_JANTJE_START + "NETWORK_PORT";
+    public static final String ENV_KEY_JANTJE_NETWORK_PASSWORD = ENV_KEY_JANTJE_START + "NETWORK_PASSWORD";
 
     public static final String ENV_KEY_JANTJE_ADDITIONAL_COMPILE_OPTIONS = ENV_KEY_JANTJE_START + "EXTRA.COMPILE";
     public static final String ENV_KEY_JANTJE_ADDITIONAL_C_COMPILE_OPTIONS = ENV_KEY_JANTJE_START + "EXTRA.C.COMPILE";

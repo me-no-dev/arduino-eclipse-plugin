@@ -587,6 +587,10 @@ public class Helpers extends Common {
 		platformPath.removeLastSegments(1).toString());
 	setBuildEnvironmentVariable(contribEnv, confDesc, "A.SERIAL.PORT", //$NON-NLS-1$
 		makeEnvironmentVar(Const.ENV_KEY_JANTJE_COM_PORT));
+	setBuildEnvironmentVariable(contribEnv, confDesc, "A.NETWORK.PORT", //$NON-NLS-1$
+		makeEnvironmentVar(Const.ENV_KEY_JANTJE_NETWORK_PORT));
+	setBuildEnvironmentVariable(contribEnv, confDesc, "A.NETWORK.PASSWORD", //$NON-NLS-1$
+		makeEnvironmentVar(Const.ENV_KEY_JANTJE_NETWORK_PASSWORD));
 	if (Platform.getOS().equals(Platform.OS_WIN32)) {
 	    setBuildEnvironmentVariable(contribEnv, confDesc, ENV_KEY_JANTJE_MAKE_LOCATION,
 		    ConfigurationPreferences.getPathExtensionPath().toOSString() + '/');
