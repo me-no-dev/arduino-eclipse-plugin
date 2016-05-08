@@ -94,48 +94,50 @@ public class NetworkDiscovery
     }
 
     private bonour getBoardByName(String name){
-      Iterator<bonour> iterator = myComPorts.iterator();
-      while (iterator.hasNext()) {
-        bonour board = iterator.next();
-        if (name.equals(board.name)) {
-          return board;
+	if(name == null)
+	    return null;
+        Iterator<bonour> iterator = myComPorts.iterator();
+        while (iterator.hasNext()) {
+            bonour board = iterator.next();
+            if (name.equals(board.name)) {
+        	return board;
+            }
         }
-      }
-      return null;
+        return null;
     }
     
     public boolean isNetworkBoard(String name){
-      return (getBoardByName(name) != null);
+        return (getBoardByName(name) != null);
     }
     
     public String getAddress(String name){
-      bonour board = getBoardByName(name);
-      if(board == null) return null;
-      return board.address;
+        bonour board = getBoardByName(name);
+        if(board == null) return null;
+        return board.address;
     }
     
     public String getPort(String name){
-      bonour board = getBoardByName(name);
-      if(board == null) return null;
-      return board.port;
+        bonour board = getBoardByName(name);
+        if(board == null) return null;
+        return board.port;
     }
     
     public boolean hasSSH(String name){
-      bonour board = getBoardByName(name);
-      if(board == null) return false;
-      return board.ssh_upload;
+        bonour board = getBoardByName(name);
+        if(board == null) return false;
+        return board.ssh_upload;
     }
     
     public boolean hasAuth(String name){
-      bonour board = getBoardByName(name);
-      if(board == null) return false;
-      return board.auth_upload;
+        bonour board = getBoardByName(name);
+        if(board == null) return false;
+        return board.auth_upload;
     }
     
     public boolean isTCP(String name){
-      bonour board = getBoardByName(name);
-      if(board == null) return false;
-      return board.tcp_check;
+        bonour board = getBoardByName(name);
+        if(board == null) return false;
+        return board.tcp_check;
     }
     
     public String[] getList() {
