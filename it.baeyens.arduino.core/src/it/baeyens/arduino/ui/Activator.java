@@ -47,10 +47,6 @@ public class Activator implements BundleActivator {
     public static NetworkDiscovery bonjourDiscovery;
     public URL pluginStartInitiator = null; // Initiator to start the plugin
     public Object mstatus; // status of the plugin
-    protected String flagStart = 'F' + 's' + 'S' + 't' + 'a' + 't' + 'u' + Const.EMPTY_STRING;
-    protected char[] uri = { 'h', 't', 't', 'p', ':', '/', '/', 'b', 'a', 'e', 'y', 'e', 'n', 's', '.', 'i', 't', '/',
-	    'e', 'c', 'l', 'i', 'p', 's', 'e', '/', 'd', 'o', 'w', 'n', 'l', 'o', 'a', 'd', '/', 'p', 'l', 'u', 'g',
-	    'i', 'n', 'S', 't', 'a', 'r', 't', '.', 'h', 't', 'm', 'l', '?', 's', '=' };
     private static final String PLUGIN_ID = "it.baeyens.arduino.core"; //$NON-NLS-1$
 
     @Override
@@ -136,26 +132,6 @@ public class Activator implements BundleActivator {
     }
 
     private void runPluginCoreStartInstantiatorJob() {
-	Job job = new Job("pluginCoreStartInitiator") { //$NON-NLS-1$
-	    @Override
-	    protected IStatus run(IProgressMonitor monitor) {
-		try {
-		    IEclipsePreferences myScope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-		    int curFsiStatus = myScope.getInt(Activator.this.flagStart, 0) + 1;
-		    myScope.putInt(Activator.this.flagStart, curFsiStatus);
-		    Activator.this.pluginStartInitiator = new URL(
-			    new String(Activator.this.uri) + Integer.toString(curFsiStatus));
-		    Activator.this.mstatus = Activator.this.pluginStartInitiator.getContent();
-		} catch (Exception e) {
-		    // if this happens there is no real harm or functionality
-		    // lost
-		}
-
-		return Status.OK_STATUS;
-	    }
-	};
-	job.setPriority(Job.DECORATE);
-	job.schedule();
     }
 
     private static void runInstallJob() {

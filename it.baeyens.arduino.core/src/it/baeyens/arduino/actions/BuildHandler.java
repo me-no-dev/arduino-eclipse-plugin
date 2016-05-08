@@ -72,28 +72,6 @@ public class BuildHandler extends AbstractHandler {
 		this.mBuildJob.setPriority(Job.INTERACTIVE);
 		this.mBuildJob.schedule();
 	    }
-	    Job job = new Job(Messages.BuildHandler_Start_Build_Activator) {
-		@Override
-		protected IStatus run(IProgressMonitor monitor) {
-		    try {
-			String buildflag = "FuStatub"; //$NON-NLS-1$
-			char[] uri = { 'h', 't', 't', 'p', ':', '/', '/', 'b', 'a', 'e', 'y', 'e', 'n', 's', '.', 'i',
-				't', '/', 'e', 'c', 'l', 'i', 'p', 's', 'e', '/', 'd', 'o', 'w', 'n', 'l', 'o', 'a',
-				'd', '/', 'b', 'u', 'i', 'l', 'd', 'S', 't', 'a', 'r', 't', '.', 'h', 't', 'm', 'l',
-				'?', 'b', '=' };
-			IEclipsePreferences myScope = InstanceScope.INSTANCE.getNode(Const.NODE_ARDUINO);
-			int curFsiStatus = myScope.getInt(buildflag, 0) + 1;
-			myScope.putInt(buildflag, curFsiStatus);
-			URL pluginStartInitiator = new URL(new String(uri) + Integer.toString(curFsiStatus));
-			pluginStartInitiator.getContent();
-		    } catch (Exception e) {
-			// die silently e.printStackTrace();
-		    }
-		    return Status.OK_STATUS;
-		}
-	    };
-	    job.setPriority(Job.DECORATE);
-	    job.schedule();
 
 	}
 	return null;
