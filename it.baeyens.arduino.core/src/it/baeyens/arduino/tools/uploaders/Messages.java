@@ -24,6 +24,7 @@ public class Messages extends NLS {
     public static String Upload_sending_sketch;
     public static String Upload_sketch_on_yun;
     public static String Upload_ssh;
+    public static String Upload_network_generic;
     public static String Upload_starting;
     public static String Upload_to;
     public static String Upload_uploading;
