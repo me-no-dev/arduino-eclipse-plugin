@@ -44,9 +44,6 @@ import it.baeyens.arduino.tools.ExternalCommandLauncher;
  * 
  */
 public class Activator implements BundleActivator {
-    public static NetworkDiscovery bonjourDiscovery;
-    public URL pluginStartInitiator = null; // Initiator to start the plugin
-    public Object mstatus; // status of the plugin
     private static final String PLUGIN_ID = "it.baeyens.arduino.core"; //$NON-NLS-1$
 
     @Override
@@ -97,7 +94,6 @@ public class Activator implements BundleActivator {
     }
 
     private static void registerListeners() {
-	// TODO Auto-generated method stub
 	IndexerListener myindexerListener = new IndexerListener();
 	CCorePlugin.getIndexManager().addIndexChangeListener(myindexerListener);
 	CCorePlugin.getIndexManager().addIndexerStateListener(myindexerListener);
@@ -107,7 +103,6 @@ public class Activator implements BundleActivator {
     }
 
     private static void runGUIRegistration() {
-	// TODO Auto-generated method stub
 	UIJob installJob = new UIJob("Arduino installer job") { //$NON-NLS-1$
 
 	    @Override
@@ -147,15 +142,13 @@ public class Activator implements BundleActivator {
 		    makeOurOwnCustomBoards_txt();
 		    Manager.startup_Pluging(monitor);
 		    monitor.setTaskName("Done!"); //$NON-NLS-1$
-		    bonjourDiscovery = new NetworkDiscovery();
-		    bonjourDiscovery.start();
+		    NetworkDiscovery.start();
 		    InstancePreferences.setConfigured();
 		    registerListeners();
 		    return Status.OK_STATUS;
 		}
 		addFileAssociations();
-		bonjourDiscovery = new NetworkDiscovery();
-		bonjourDiscovery.start();
+		NetworkDiscovery.start();
 		return Status.CANCEL_STATUS;
 	    }
 
@@ -168,7 +161,6 @@ public class Activator implements BundleActivator {
 	     */
 	    @SuppressWarnings("boxing")
 	    private boolean DownloadFolderConditionsOK() {
-		// TODO Auto-generated method stub
 		Path installPath = ConfigurationPreferences.getInstallationPath();
 		installPath.toFile().mkdirs();
 		boolean cantWrite = !installPath.toFile().canWrite();

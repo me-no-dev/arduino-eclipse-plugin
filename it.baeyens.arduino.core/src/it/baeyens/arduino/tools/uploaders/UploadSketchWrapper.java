@@ -61,6 +61,8 @@ public class UploadSketchWrapper {
 
 	String UpLoadTool = Common.getBuildEnvironmentVariable(Project, cConf, Const.get_ENV_KEY_TOOL(Const.ACTION_UPLOAD), Const.EMPTY_STRING);
 	String MComPort = Common.getBuildEnvironmentVariable(Project, cConf, Const.ENV_KEY_JANTJE_COM_PORT, Const.EMPTY_STRING);
+	String uploadClass = Common.getBuildEnvironmentVariable(Project, cConf, Const.get_ENV_KEY_TOOL(Const.UPLOAD_CLASS), Const.EMPTY_STRING);
+
 	this.myConsole = Helpers.findConsole(Messages.Upload_console);
 	this.myConsole.clearConsole();
 	this.myConsole.activate();
@@ -150,7 +152,8 @@ public class UploadSketchWrapper {
 	    boolean WeStoppedTheComPort = false;
 	    String myComPort = Const.EMPTY_STRING;
 	    try {
-		monitor.beginTask(Messages.Upload_uploading + " \"" + this.myProject.getName() + "\" " + this.myNAmeTag, 2); //$NON-NLS-1$//$NON-NLS-2$
+		monitor.beginTask(Messages.Upload_uploading + " \"" + this.myProject.getName() + "\" " + this.myNAmeTag, //$NON-NLS-1$//$NON-NLS-2$
+			2);
 		myComPort = Common.getBuildEnvironmentVariable(this.myProject, this.myCConf, Const.ENV_KEY_JANTJE_COM_PORT, ""); //$NON-NLS-1$
 
 		try {
@@ -159,7 +162,7 @@ public class UploadSketchWrapper {
 		    Common.log(new Status(IStatus.WARNING, Const.CORE_PLUGIN_ID, Messages.Upload_Error_com_port, e));
 		}
 		IFile hexFile = this.myProject.getFile(new Path(this.myCConf).append(this.myProject.getName() + ".hex")); //$NON-NLS-1$
-		if (this.myUploader.uploadUsingPreferences(hexFile, this.myProject, false, monitor)) {
+		if (this.myUploader.uploadUsingPreferences(hexFile, false, monitor)) {
 		    UploadSketchWrapper.this.myHighLevelConsoleStream.println(Messages.Upload_Done);
 		} else {
 		    UploadSketchWrapper.this.myHighLevelConsoleStream.println(Messages.Upload_failed_upload);
