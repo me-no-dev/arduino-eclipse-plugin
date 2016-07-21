@@ -57,9 +57,12 @@ public class UploadSketchWrapper {
 	    Common.log(new Status(IStatus.ERROR, Const.CORE_PLUGIN_ID, Messages.Upload_Project_nature_unaccesible, e));
 	}
 
-	String UpLoadTool = Common.getBuildEnvironmentVariable(Project, cConf, Const.get_ENV_KEY_TOOL(Const.ACTION_UPLOAD), Const.EMPTY_STRING);
-	String MComPort = Common.getBuildEnvironmentVariable(Project, cConf, Const.ENV_KEY_JANTJE_COM_PORT, Const.EMPTY_STRING);
-	String uploadClass = Common.getBuildEnvironmentVariable(Project, cConf, Const.get_ENV_KEY_TOOL(Const.UPLOAD_CLASS), Const.EMPTY_STRING);
+	String UpLoadTool = Common.getBuildEnvironmentVariable(Project, cConf,
+		Const.get_ENV_KEY_TOOL(Const.ACTION_UPLOAD), Const.EMPTY_STRING);
+	String MComPort = Common.getBuildEnvironmentVariable(Project, cConf, Const.ENV_KEY_JANTJE_COM_PORT,
+		Const.EMPTY_STRING);
+	String uploadClass = Common.getBuildEnvironmentVariable(Project, cConf,
+		Const.get_ENV_KEY_TOOL(Const.UPLOAD_CLASS), Const.EMPTY_STRING);
 
 	this.myConsole = Helpers.findConsole(Messages.Upload_console);
 	this.myConsole.clearConsole();
@@ -84,12 +87,14 @@ public class UploadSketchWrapper {
 	    } else {
 		this.myHighLevelConsoleStream.println(Messages.Upload_ssh);
 
-		realUploader = new SSHUpload(this.myHighLevelConsoleStream, this.myOutconsoleStream, this.myErrconsoleStream, host);
+		realUploader = new SSHUpload(Project, UpLoadTool, this.myHighLevelConsoleStream,
+			this.myOutconsoleStream, this.myErrconsoleStream, host);
 		uploadJobName = Const.UPLOAD_SSH;
 	    }
 	} else if (UpLoadTool.equalsIgnoreCase(Const.UPLOAD_TOOL_TEENSY)) {
 	    this.myHighLevelConsoleStream.println(Messages.Upload_generic);
-	    realUploader = new GenericLocalUploader(UpLoadTool, Project, cConf, this.myConsole, this.myErrconsoleStream, this.myOutconsoleStream);
+	    realUploader = new GenericLocalUploader(UpLoadTool, Project, cConf, this.myConsole, this.myErrconsoleStream,
+		    this.myOutconsoleStream);
 	    uploadJobName = UpLoadTool;
 	} else {
 	    this.myHighLevelConsoleStream.println(Messages.Upload_arduino);
@@ -106,7 +111,8 @@ public class UploadSketchWrapper {
     }
 
     /**
-     * UploadJobWrapper stops the serial port and restarts the serial port as needed. in between it calls the real uploader IUploader
+     * UploadJobWrapper stops the serial port and restarts the serial port as
+     * needed. in between it calls the real uploader IUploader
      * 
      * @author jan
      * 
@@ -128,19 +134,27 @@ public class UploadSketchWrapper {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 	    boolean WeStoppedTheComPort = false;
-	    String myComPort = Const.EMPTY_STRING;
+	    String comPort = Const.EMPTY_STRING;
 	    try {
-		monitor.beginTask(Messages.Upload_uploading + " \"" + this.myProject.getName() + "\" " + this.myNAmeTag, //$NON-NLS-1$//$NON-NLS-2$
-			2);
-		myComPort = Common.getBuildEnvironmentVariable(this.myProject, this.myCConf, Const.ENV_KEY_JANTJE_COM_PORT, ""); //$NON-NLS-1$
+		String message = Messages.Upload_uploading;
+		message += " \"" + this.myProject.getName() + "\" "; //$NON-NLS-1$//$NON-NLS-2$
+		message += this.myNAmeTag + Const.SPACE;
+		// message+= this.+Const.SPACE;
+		monitor.beginTask(message, 2);
+		comPort = Common.getBuildEnvironmentVariable(this.myProject, this.myCConf,
+			Const.ENV_KEY_JANTJE_COM_PORT, Const.EMPTY_STRING);
+		String programmer = Common.getBuildEnvironmentVariable(this.myProject, this.myCConf,
+			Const.get_Jantje_KEY_PROTOCOL(Const.ACTION_UPLOAD), Const.DEFAULT);
 
 		try {
-		    WeStoppedTheComPort = Common.StopSerialMonitor(myComPort);
+		    WeStoppedTheComPort = Common.StopSerialMonitor(comPort);
 		} catch (Exception e) {
 		    Common.log(new Status(IStatus.WARNING, Const.CORE_PLUGIN_ID, Messages.Upload_Error_com_port, e));
 		}
-		IFile hexFile = this.myProject.getFile(new Path(this.myCConf).append(this.myProject.getName() + ".hex")); //$NON-NLS-1$
-		if (this.myUploader.uploadUsingPreferences(hexFile, false, monitor)) {
+		IFile hexFile = this.myProject
+			.getFile(new Path(this.myCConf).append(this.myProject.getName() + ".hex")); //$NON-NLS-1$
+		if (this.myUploader.uploadUsingPreferences(hexFile, !programmer.equalsIgnoreCase(Const.DEFAULT),
+			monitor)) {
 		    UploadSketchWrapper.this.myHighLevelConsoleStream.println(Messages.Upload_Done);
 		} else {
 		    UploadSketchWrapper.this.myHighLevelConsoleStream.println(Messages.Upload_failed_upload);
@@ -151,10 +165,11 @@ public class UploadSketchWrapper {
 	    } finally {
 		try {
 		    if (WeStoppedTheComPort) {
-			Common.StartSerialMonitor(myComPort);
+			Common.StartSerialMonitor(comPort);
 		    }
 		} catch (Exception e) {
-		    Common.log(new Status(IStatus.WARNING, Const.CORE_PLUGIN_ID, Messages.Upload_Error_serial_monitor_restart, e));
+		    Common.log(new Status(IStatus.WARNING, Const.CORE_PLUGIN_ID,
+			    Messages.Upload_Error_serial_monitor_restart, e));
 		}
 		monitor.done();
 	    }
